@@ -21,11 +21,16 @@ export async function createSession(
   const base = getApiBase();
   const res = await fetch(`${base}/api/sessions`, {
     method: "POST",
+    signal: AbortSignal.timeout(30000),
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ title, message, model, providerId, environment, ...extra }),
   });
-  if (!res.ok) throw new Error(`Failed to create session: ${res.statusText}`);
-  return res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Impossible de créer le projet (${res.status}).`);
+  if (typeof data.id !== "string" || !data.id) {
+    throw new Error("La création du projet n’a pas renvoyé de session valide. Réessayez.");
+  }
+  return data;
 }
 
 export async function listSessions(): Promise<

@@ -172,5 +172,7 @@
     },
     "jsx": "preserve"
   },
-  "files": []
+  "files": [
+    "types/root.d.ts"
+  ]
 }

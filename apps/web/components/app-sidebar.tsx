@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -28,6 +28,7 @@ import { ImportRepoModal } from "@/components/import-repo-modal";
 import { SettingsPanel } from "@/components/settings-panel";
 import { PWAInstallButton } from "@/components/pwa-install-button";
 import { useTheme } from "@/lib/theme/theme-context";
+import { Button } from "@/components/ui/button";
 
 interface SessionItem {
   id: string;
@@ -58,11 +59,14 @@ export function AppSidebar({
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [isOpening, startOpening] = useTransition();
+  const [creationError, setCreationError] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const handleCreateNewSession = async () => {
-    if (isCreating) return;
+    if (isCreating || isOpening) return;
     setIsCreating(true);
+    setCreationError(null);
     try {
       const session = await createSession(
         "Nouveau Projet IA",
@@ -72,11 +76,12 @@ export function AppSidebar({
         "local"
       );
       fetchSessions();
-      onMobileClose?.();
-      router.push(`/chat/${session.id}`);
+      startOpening(() => {
+        router.push(`/chat/${session.id}`);
+      });
     } catch (err) {
       console.error("Failed to create session:", err);
-      router.push("/");
+      setCreationError(err instanceof Error ? err.message : "Impossible d’ouvrir le projet. Réessayez.");
     } finally {
       setIsCreating(false);
     }
@@ -227,24 +232,28 @@ export function AppSidebar({
 
       {/* 2. Primary Action: Nouveau projet */}
       <div className="p-3 pb-2 space-y-2">
-        <button
+        <Button
           type="button"
           onClick={handleCreateNewSession}
-          disabled={isCreating}
+          disabled={isCreating || isOpening}
+          aria-busy={isCreating || isOpening}
           className="flex items-center justify-between w-full rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] px-3.5 py-2.5 text-xs font-bold shadow-xs hover:opacity-95 active:scale-[0.99] transition cursor-pointer disabled:opacity-60"
         >
           <div className="flex items-center gap-2">
-            {isCreating ? (
+            {isCreating || isOpening ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <Plus className="h-4 w-4" />
             )}
-            <span>{isCreating ? "Création..." : "Nouveau projet IA"}</span>
+            <span>{isOpening ? "Ouverture..." : isCreating ? "Création..." : "Nouveau projet IA"}</span>
           </div>
           <span className="text-[10px] font-mono opacity-80 bg-black/15 px-1.5 py-0.5 rounded">
             ⌘N
           </span>
-        </button>
+        </Button>
+        {creationError && (
+          <p role="alert" className="text-xs text-[var(--foreground)]">{creationError}</p>
+        )}
 
         {/* Secondary Quick Nav Items */}
         <div className="grid grid-cols-2 gap-1.5 pt-0.5">

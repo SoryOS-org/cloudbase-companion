@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "cd apps/web && next dev -p 8080 -H 0.0.0.0",
+    "dev": "cd apps/web && ./node_modules/.bin/next dev -H 0.0.0.0",
     "start": "npm --prefix apps/web run start",
     "build": "npm --prefix apps/web run build",
     "lint": "npm --prefix apps/web run lint",

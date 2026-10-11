@@ -8,166 +8,166 @@
     "skipLibCheck": true,
     "paths": {
       "@soryos/core": [
-        "packages/core/src"
+        "./packages/core/src"
       ],
       "@soryos/core/*": [
-        "packages/core/src/*"
+        "./packages/core/src/*"
       ],
       "@soryos/schema": [
-        "packages/schema/src"
+        "./packages/schema/src"
       ],
       "@soryos/schema/*": [
-        "packages/schema/src/*"
+        "./packages/schema/src/*"
       ],
       "@soryos/bus": [
-        "packages/bus/src"
+        "./packages/bus/src"
       ],
       "@soryos/bus/*": [
-        "packages/bus/src/*"
+        "./packages/bus/src/*"
       ],
       "@soryos/permissions": [
-        "packages/permissions/src"
+        "./packages/permissions/src"
       ],
       "@soryos/permissions/*": [
-        "packages/permissions/src/*"
+        "./packages/permissions/src/*"
       ],
       "@soryos/execution": [
-        "packages/execution/src"
+        "./packages/execution/src"
       ],
       "@soryos/execution/*": [
-        "packages/execution/src/*"
+        "./packages/execution/src/*"
       ],
       "@soryos/tool": [
-        "packages/tool/src"
+        "./packages/tool/src"
       ],
       "@soryos/tool/*": [
-        "packages/tool/src/*"
+        "./packages/tool/src/*"
       ],
       "@soryos/workspace": [
-        "packages/workspace/src"
+        "./packages/workspace/src"
       ],
       "@soryos/workspace/*": [
-        "packages/workspace/src/*"
+        "./packages/workspace/src/*"
       ],
       "@soryos/session": [
-        "packages/session/src"
+        "./packages/session/src"
       ],
       "@soryos/session/*": [
-        "packages/session/src/*"
+        "./packages/session/src/*"
       ],
       "@soryos/provider": [
-        "packages/provider/src"
+        "./packages/provider/src"
       ],
       "@soryos/provider/*": [
-        "packages/provider/src/*"
+        "./packages/provider/src/*"
       ],
       "@soryos/filesystem": [
-        "packages/filesystem/src"
+        "./packages/filesystem/src"
       ],
       "@soryos/filesystem/*": [
-        "packages/filesystem/src/*"
+        "./packages/filesystem/src/*"
       ],
       "@soryos/git": [
-        "packages/git/src"
+        "./packages/git/src"
       ],
       "@soryos/git/*": [
-        "packages/git/src/*"
+        "./packages/git/src/*"
       ],
       "@soryos/pty": [
-        "packages/pty/src"
+        "./packages/pty/src"
       ],
       "@soryos/pty/*": [
-        "packages/pty/src/*"
+        "./packages/pty/src/*"
       ],
       "@soryos/config": [
-        "packages/config/src"
+        "./packages/config/src"
       ],
       "@soryos/config/*": [
-        "packages/config/src/*"
+        "./packages/config/src/*"
       ],
       "@soryos/auth": [
-        "packages/auth/src"
+        "./packages/auth/src"
       ],
       "@soryos/auth/*": [
-        "packages/auth/src/*"
+        "./packages/auth/src/*"
       ],
       "@soryos/credentials": [
-        "packages/credentials/src"
+        "./packages/credentials/src"
       ],
       "@soryos/credentials/*": [
-        "packages/credentials/src/*"
+        "./packages/credentials/src/*"
       ],
       "@soryos/sandbox": [
-        "packages/sandbox/src"
+        "./packages/sandbox/src"
       ],
       "@soryos/sandbox/*": [
-        "packages/sandbox/src/*"
+        "./packages/sandbox/src/*"
       ],
       "@soryos/terminal": [
-        "packages/terminal/src"
+        "./packages/terminal/src"
       ],
       "@soryos/terminal/*": [
-        "packages/terminal/src/*"
+        "./packages/terminal/src/*"
       ],
       "@soryos/github": [
-        "packages/github/src"
+        "./packages/github/src"
       ],
       "@soryos/github/*": [
-        "packages/github/src/*"
+        "./packages/github/src/*"
       ],
       "@soryos/database": [
-        "packages/database/src"
+        "./packages/database/src"
       ],
       "@soryos/database/*": [
-        "packages/database/src/*"
+        "./packages/database/src/*"
       ],
       "@soryos/jobs": [
-        "packages/jobs/src"
+        "./packages/jobs/src"
       ],
       "@soryos/jobs/*": [
-        "packages/jobs/src/*"
+        "./packages/jobs/src/*"
       ],
       "@soryos/images": [
-        "packages/images/src"
+        "./packages/images/src"
       ],
       "@soryos/images/*": [
-        "packages/images/src/*"
+        "./packages/images/src/*"
       ],
       "@soryos/voice": [
-        "packages/voice/src"
+        "./packages/voice/src"
       ],
       "@soryos/voice/*": [
-        "packages/voice/src/*"
+        "./packages/voice/src/*"
       ],
       "@soryos/vision": [
-        "packages/vision/src"
+        "./packages/vision/src"
       ],
       "@soryos/vision/*": [
-        "packages/vision/src/*"
+        "./packages/vision/src/*"
       ],
       "@soryos/agent": [
-        "packages/agent/src"
+        "./packages/agent/src"
       ],
       "@soryos/agent/*": [
-        "packages/agent/src/*"
+        "./packages/agent/src/*"
       ],
       "@soryos/dev-runner": [
-        "packages/dev-runner/src"
+        "./packages/dev-runner/src"
       ],
       "@soryos/dev-runner/*": [
-        "packages/dev-runner/src/*"
+        "./packages/dev-runner/src/*"
       ],
       "@soryos/cli": [
-        "packages/cli/src"
+        "./packages/cli/src"
       ],
       "@soryos/cli/*": [
-        "packages/cli/src/*"
+        "./packages/cli/src/*"
       ],
       "@soryos/shared": [
-        "packages/shared/src"
+        "./packages/shared/src"
       ],
       "@soryos/shared/*": [
-        "packages/shared/src/*"
+        "./packages/shared/src/*"
       ]
     }
   }

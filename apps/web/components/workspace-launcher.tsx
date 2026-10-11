@@ -101,7 +101,11 @@ export function WorkspaceLauncher({ onWorkspaceOpened }: WorkspaceLauncherProps)
 
   // Handle Open Local Folder (100% autonomous, no cloud sandbox, no GitHub required)
   const handleOpenLocalFolder = async () => {
-    if (!localFolderPath.trim()) return;
+    if (loading) return;
+    if (!localFolderPath.trim()) {
+      setErrorMessage("Indiquez le chemin du dossier à ouvrir.");
+      return;
+    }
     setLoading(true);
     setErrorMessage(null);
     setStatusMessage("Ouverture du Workspace Local sur le système de fichiers réel...");
@@ -117,19 +121,21 @@ export function WorkspaceLauncher({ onWorkspaceOpened }: WorkspaceLauncherProps)
       );
 
       // Set session environment to local
-      await fetch(`/api/sessions/${session.id}`, {
+      const response = await fetch(`/api/sessions/${session.id}`, {
         method: "PATCH",
+        signal: AbortSignal.timeout(30000),
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ environment: "local", providerId: "local" }),
       });
+      if (!response.ok) throw new Error("Impossible de configurer le projet local. Réessayez.");
 
       if (onWorkspaceOpened) {
         onWorkspaceOpened(session.id, "local", "local");
       } else {
         router.push(`/chat/${session.id}`);
       }
-    } catch {
-      setErrorMessage("Impossible d'ouvrir le dossier local. Vérifiez les permissions d'accès.");
+    } catch (error: unknown) {
+      setErrorMessage(error instanceof Error ? error.message : "Impossible d'ouvrir le dossier local. Vérifiez les permissions d'accès.");
       setLoading(false);
     }
   };
@@ -251,8 +257,9 @@ export function WorkspaceLauncher({ onWorkspaceOpened }: WorkspaceLauncherProps)
         cloudApiKey ? { apiKey: cloudApiKey.trim() } : {}
       );
 
-      await fetch(`/api/sessions/${session.id}`, {
+      const response = await fetch(`/api/sessions/${session.id}`, {
         method: "PATCH",
+        signal: AbortSignal.timeout(30000),
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           environment: "sandbox",
@@ -260,14 +267,15 @@ export function WorkspaceLauncher({ onWorkspaceOpened }: WorkspaceLauncherProps)
           ...(cloudApiKey ? { apiKey: cloudApiKey.trim() } : {}),
         }),
       });
+      if (!response.ok) throw new Error(`Impossible de configurer l’environnement ${meta.name}. Réessayez.`);
 
       if (onWorkspaceOpened) {
         onWorkspaceOpened(session.id, "sandbox", providerId);
       } else {
         router.push(`/chat/${session.id}`);
       }
-    } catch {
-      setErrorMessage(`Échec de lancement de l'environnement ${providerId}.`);
+    } catch (error: unknown) {
+      setErrorMessage(error instanceof Error ? error.message : `Échec de lancement de l'environnement ${providerId}.`);
       setLoading(false);
     }
   };

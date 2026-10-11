@@ -169,6 +169,8 @@
       "@soryos/shared/*": [
         "./packages/shared/src/*"
       ]
-    }
-  }
+    },
+    "jsx": "preserve"
+  },
+  "files": []
 }

@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
   ],
   turbopack: {},
   async redirects() {
-    return [{ source: "/index", destination: "/", permanent: false }];
+    return [];
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {

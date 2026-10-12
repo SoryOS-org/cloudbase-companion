@@ -81,13 +81,17 @@ export class AgentRuntime {
     const input = options.input || lastUserMsg?.content || '';
     const emit = options.emit;
 
+    const model = options.model || options.modelId || session?.model;
     const normalizedOptions: AgentRunOptions = {
       ...options,
       sessionId,
-      input,
+      input: options.input || options.userMessage || input,
       streaming: options.streaming ?? true,
-      model: options.model || session?.model,
-      provider: options.provider || session?.providerId || session?.provider,
+      model,
+      provider:
+        normalizeProviderId(options.provider) ||
+        providerForModel(model) ||
+        normalizeProviderId(session?.providerId || session?.provider),
     };
 
     // Set running state

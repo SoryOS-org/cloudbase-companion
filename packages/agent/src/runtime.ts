@@ -175,6 +175,9 @@ export class AgentRuntime {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       const errorObj = error instanceof Error ? error : new Error(errorMessage);
+      if (emit) {
+        emit({ type: "error", message: errorMessage });
+      }
       
       // Use error recovery manager if available
       if (this.errorRecoveryManager) {

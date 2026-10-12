@@ -255,6 +255,11 @@ export default function ChatPage({
             }),
           );
           void refreshFiles();
+        } else if ((ev as { type: string }).type === "error") {
+          const message = (ev as { message?: string }).message || "Erreur inconnue";
+          textBufferRef.current += `\n\n⚠️ ${message}`;
+          scheduleFlush(gen);
+          setStatus(message);
         } else if (ev.type === "preview" && ev.url) {
           setPreviewUrl(ev.url);
         } else if (ev.type === "files_changed") {

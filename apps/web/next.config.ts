@@ -33,6 +33,9 @@ const nextConfig: NextConfig = {
     "@soryos/images",
   ],
   turbopack: {},
+  async redirects() {
+    return [{ source: "/index", destination: "/", permanent: false }];
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {

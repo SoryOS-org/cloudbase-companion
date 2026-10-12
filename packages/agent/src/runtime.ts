@@ -17,6 +17,7 @@ import { GlobalEventBus } from '@soryos/bus';
 import { ToolExecutor, ToolRegistry } from '@soryos/tool';
 import { sessionStore, messageStore, SessionStore } from '@soryos/session';
 import { ErrorRecoveryManager, getErrorRecoveryManager, classifyError, ClassifiedError } from './error-handler';
+import { streamChat, normalizeProviderId, providerForModel } from './llm-client';
 
 /**
  * Agent Runtime
@@ -80,13 +81,17 @@ export class AgentRuntime {
     const input = options.input || lastUserMsg?.content || '';
     const emit = options.emit;
 
+    const model = options.model || options.modelId || session?.model;
     const normalizedOptions: AgentRunOptions = {
       ...options,
       sessionId,
-      input,
+      input: options.input || options.userMessage || input,
       streaming: options.streaming ?? true,
-      model: options.model || session?.model,
-      provider: options.provider || session?.providerId || session?.provider,
+      model,
+      provider:
+        normalizeProviderId(options.provider) ||
+        providerForModel(model) ||
+        normalizeProviderId(session?.provider),
     };
 
     // Set running state
@@ -170,6 +175,9 @@ export class AgentRuntime {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       const errorObj = error instanceof Error ? error : new Error(errorMessage);
+      if (emit) {
+        emit({ type: "error", message: errorMessage });
+      }
       
       // Use error recovery manager if available
       if (this.errorRecoveryManager) {
@@ -427,33 +435,25 @@ export class AgentRuntime {
       console.error('[Agent] Stderr:', data);
     };
 
-    // Execute with streaming
-    let exitCode = 0;
-    try {
-      if (typeof provider.streamResponse === 'function') {
-        const result = await provider.streamResponse(prompt, {
-          ...options,
-          onStdout: handleStdout,
-          onStderr: handleStderr
-        });
-        exitCode = result?.exitCode || 0;
-      } else if (typeof provider.stream === 'function') {
-        for await (const chunk of provider.stream({ messages: [{ role: 'user', content: prompt }] })) {
-          if (chunk.delta) {
-            handleStdout(chunk.delta);
-          }
-        }
-      } else if (typeof provider.generate === 'function') {
-        const result = await provider.generate({ messages: [{ role: 'user', content: prompt }] });
-        if (result?.text) {
-          handleStdout(result.text);
-        }
-      }
-    } catch (streamErr) {
-      const errMsg = streamErr instanceof Error ? streamErr.message : String(streamErr);
-      handleStderr(errMsg);
-      exitCode = 1;
-    }
+    // Real streaming call to the provider API (key resolved via @soryos/credentials)
+    const exitCode = 0;
+    const providerId =
+      normalizeProviderId(agentConfig.provider) || providerForModel(agentConfig.model) || 'opencode-zen';
+    await streamChat({
+      providerId,
+      model: agentConfig.model,
+      sessionId,
+      messages: [
+        { role: 'system', content: 'Tu es SoryOS-Code, un assistant de développement logiciel. Réponds dans la langue de l\'utilisateur.' },
+        { role: 'user', content: prompt },
+      ],
+      onDelta: (text) => {
+        stdoutChunks.push(text);
+        this.processTextChunk(text, sessionId, Date.now());
+      },
+    });
+    void handleStdout;
+    void provider;
 
     // Return combined result
     return {

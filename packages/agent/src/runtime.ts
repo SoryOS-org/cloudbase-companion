@@ -91,7 +91,7 @@ export class AgentRuntime {
       provider:
         normalizeProviderId(options.provider) ||
         providerForModel(model) ||
-        normalizeProviderId(session?.providerId || session?.provider),
+        normalizeProviderId(session?.provider),
     };
 
     // Set running state

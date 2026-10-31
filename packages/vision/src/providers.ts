@@ -851,7 +851,7 @@ export class AnthropicVisionProvider extends BaseVisionProvider {
 
       // Prepare request body
       const requestBody = {
-        model: this.model,
+        model: this.model === 'claude-3-haiku' ? 'claude-haiku-4-5-20251001' : this.model,
         max_tokens: options.maxTokens || this.config.maxTokens || 4096,
         temperature: options.temperature || this.config.temperature || 0.7,
         messages: [
